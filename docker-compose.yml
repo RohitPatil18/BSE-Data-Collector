@@ -1,0 +1,44 @@
+version: "3.3"
+services:
+
+  web:
+    restart: always
+    build: 
+      context: .
+      dockerfile: ./bse_data_collector/Dockerfile
+    container_name: bse-data-collector-web
+    image: bse-data-collector-web
+    volumes:
+      - bse-data-collector-static:/bse_data_collector/static
+      - bse-data-collector-media:/bse_data_collector/media
+      - ./bse_data_collector:/bse_data_collector/
+    command: bash -c "python manage.py collectstatic --no-input && python manage.py migrate && gunicorn --workers=3 bse_data_collector.wsgi -b 0.0.0.0:8000"
+
+  nginx:
+    restart: always
+    container_name: bse-data-collector-nginx
+    image: bse-data-collector-nginx
+    build: ./nginx/
+    volumes:
+      - ./nginx/:/etc/nginx/conf.d
+      - ./logs/:/bse_data_collector/logs
+      - bse-data-collector-static:/bse_data_collector/static
+      - bse-data-collector-media:/bse_data_collector/media
+    ports:
+      - "3100:80"
+    links:
+      - web
+
+  redis:
+    container_name: bse-data-collector-redis
+    restart: always
+    image: redis:latest
+    volumes:
+        - bse-data-collector-redis-data:/data
+    expose:
+      - "6379"
+
+volumes:
+  bse-data-collector-static:
+  bse-data-collector-media:
+  bse-data-collector-redis-data:
