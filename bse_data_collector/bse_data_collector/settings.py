@@ -73,8 +73,8 @@ DATABASES = {
 }
 
 REDIS_DATABASE = {
-    'HOST' : '127.0.0.1',
-    'PORT' : '6379',
+    'HOST' :  env('REDIS_HOST'),
+    'PORT' :  env('REDIS_PORT'),
     'DB' : 0
 }
 

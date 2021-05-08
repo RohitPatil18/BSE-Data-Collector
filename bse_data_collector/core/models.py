@@ -85,41 +85,46 @@ class RedisModel:
             data.append(r.hgetall(i))
         return data
 
-    @classmethod
-    def paginate(self, page=1, size=50):
+    def _get_sliced_data(self, pattern, page, size):
         r = connect_db()
         data = []
         cursor = page-1
-        keys = r.scan(cursor, f'{self.Meta.name}:*', count=size)
+        keys = r.scan(cursor, pattern, count=size)
         for i in keys[1]:
             data.append(r.hgetall(i))
-        return data
+        return data 
 
     @classmethod
-    def find_all(self, value, paginate=False, page=1, size=50):
+    def paginate(cls, page=1, size=50):
+        pattern = f'{cls.Meta.name}:*'
+        return cls._get_sliced_data(cls, pattern, page, size)
+
+
+    @classmethod
+    def find_all(cls, value):
         '''
         Returns list of objects which key_field value startswith provided value
         '''
-        r = connect_db()
         data = []
         value = value.lower()
-        if paginate:
-            keys = r.scan(cursor, f'{self.Meta.name}:*', count=size)
-            for i in keys[1]:
-                data.append(r.hgetall(i))
-        else:
-            for i in r.scan_iter(f'{self.Meta.name}:{value}*'):
-                data.append(r.hgetall(i))
+        # if paginate:
+        #     pattern = f'{cls.Meta.name}:{value}*'
+        #     print(pattern)
+        #     data = cls._get_sliced_data(cls, pattern, page, size)
+        # else:
+        r = connect_db()
+        for i in r.scan_iter(f'{cls.Meta.name}:{value}*'):
+            data.append(r.hgetall(i))
         return data   
 
     @classmethod
-    def find(self, value):
+    def find(cls, value):
         '''
         Returns list of objects which key_field value startswith provided value
         '''
         r = connect_db()
         value = value.lower()
-        data = r.hgetall(f'{self.Meta.name}:{value}')
+        data = r.hgetall(f'{cls.Meta.name}:{value}')
         if data == {}:
             raise ObjectDoesNotExist
         return data     

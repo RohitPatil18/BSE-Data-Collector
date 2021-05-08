@@ -1,8 +1,9 @@
 from django.urls import path
 
-from .views import index, fetch_records
+from . import views
 
 urlpatterns = [
-    path('', index, name='index'),
-    path('records', fetch_records, name='fetch-records')
+    path('', views.index, name='index'),
+    path('records', views.fetch_records, name='fetch-records'),
+    path('download', views.download_file)
 ]

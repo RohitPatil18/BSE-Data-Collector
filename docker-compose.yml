@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: ./bse_data_collector/Dockerfile
     container_name: bse-data-collector-web
-    image: bse-data-collector-web
+    image: bse-data-collector-django
     volumes:
       - bse-data-collector-static:/bse_data_collector/static
       - bse-data-collector-media:/bse_data_collector/media
@@ -37,6 +37,30 @@ services:
         - bse-data-collector-redis-data:/data
     expose:
       - "6379"
+
+  celery:
+    image: bse-data-collector-django
+    container_name: bse-data-collector-celery
+    command: bash -c "celery -A bse_data_collector worker --loglevel=INFO"
+    environment:
+      C_FORCE_ROOT : "true"
+      WORKER: "1"
+    volumes:
+      - ./bse_data_collector:/bse_data_collector/
+    depends_on:
+      - redis
+
+  celery-beat:
+    container_name: bse-data-collector-celery-beat
+    image: bse-data-collector-django
+    restart: always
+    command: bash -c "celery -A bse_data_collector beat --loglevel=info"
+    environment:
+      C_FORCE_ROOT : "true"
+    volumes:
+      - ./bse_data_collector:/bse_data_collector/
+    depends_on:
+      - redis
 
 volumes:
   bse-data-collector-static:

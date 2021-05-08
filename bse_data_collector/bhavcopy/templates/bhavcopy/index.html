@@ -30,7 +30,7 @@
                                 <input v-model="searchInput" class="form-control" type="text" v-on:input="searchData" placeholder="Search for share by name">
                             </div>
                             <div class="col-2">
-                                <a class="btn btn-primary mb-3" href="/api/export"> <i class="fa fa-download"></i> Download</button></a>
+                                <a class="btn btn-primary mb-3" v-bind:href="'/download?search='+searchInput"> <i class="fa fa-download"></i> Download</button></a>
                             </div>
                         </div>
                 </form>
@@ -68,8 +68,8 @@
             </div>
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
-                  <li v-if="page > 1" class="page-item"><a class="page-link" href="#">Previous</a></li>
-                  <li v-if="next"><a class="page-link" v-on:input="searchData">Next</a></li>
+                  <li v-if="page > 1 && searchInput === ''" class="page-item" v-on:click="loadPreviousData"><a class="page-link" href="#">Previous</a></li>
+                  <li v-if="next && searchInput === ''" class="page-item" v-on:click="loadNextData"><a class="page-link" href="#">Next</a></li>
                 </ul>
               </nav>
           </div> 
@@ -100,7 +100,7 @@
                 },
                 searchData(){
                     axios
-                        .get('/records?search='+this.searchInput+'&page='+this.page+'&size='+this.size)
+                        .get('/records?search='+this.searchInput)
                         .then(response => {
                             this.records = response.data;
                         })
@@ -111,7 +111,29 @@
                 },
                 loadNextData(){
                     this.page = this.page + 1
-                    loadData()
+                    this.loading = true
+                    axios
+                        .get('/records?page='+this.page+'&size='+this.size)
+                        .then(response => {
+                            this.records = response.data;
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        })
+                        .finally(() => this.loading = false)
+                },
+                loadPreviousData(){
+                    this.page = this.page - 1
+                    this.loading = true
+                    axios
+                        .get('/records?page='+this.page+'&size='+this.size)
+                        .then(response => {
+                            this.records = response.data;
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        })
+                        .finally(() => this.loading = false)
                 }
             },
             mounted() {

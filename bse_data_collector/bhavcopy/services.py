@@ -48,7 +48,7 @@ class BhavCopyScraper:
                 last=row['LAST'],
                 prevclose=row['PREVCLOSE'],
                 no_trades=row['NO_TRADES'],
-                no_od_shares=row['NO_OF_SHRS'], 
+                no_of_shares=row['NO_OF_SHRS'], 
                 net_turnover=row['NET_TURNOV'],
                 record_date=rec_date
             )

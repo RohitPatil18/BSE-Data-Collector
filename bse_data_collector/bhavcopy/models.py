@@ -16,7 +16,7 @@ class BhavCopyRecord(RedisModel):
             'last',
             'prevclose',
             'no_trades',
-            'no_od_shares', 
+            'no_of_shares', 
             'net_turnover',
             'record_date'
         ]
