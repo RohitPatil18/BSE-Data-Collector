@@ -86,15 +86,30 @@ class RedisModel:
         return data
 
     @classmethod
-    def find_all(self, value):
+    def paginate(self, page=1, size=50):
+        r = connect_db()
+        data = []
+        cursor = page-1
+        keys = r.scan(cursor, f'{self.Meta.name}:*', count=size)
+        for i in keys[1]:
+            data.append(r.hgetall(i))
+        return data
+
+    @classmethod
+    def find_all(self, value, paginate=False, page=1, size=50):
         '''
         Returns list of objects which key_field value startswith provided value
         '''
         r = connect_db()
         data = []
         value = value.lower()
-        for i in r.scan_iter(f'{self.Meta.name}:{value}*'):
-            data.append(r.hgetall(i))
+        if paginate:
+            keys = r.scan(cursor, f'{self.Meta.name}:*', count=size)
+            for i in keys[1]:
+                data.append(r.hgetall(i))
+        else:
+            for i in r.scan_iter(f'{self.Meta.name}:{value}*'):
+                data.append(r.hgetall(i))
         return data   
 
     @classmethod

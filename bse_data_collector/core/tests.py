@@ -34,4 +34,6 @@ class RedisModelTestCase(TestCase):
     def test_find_all(self):
         res = Student.find_all('J')
         self.assertEqual(len(res), 2)
+        res = Student.paginate()
+        
         
