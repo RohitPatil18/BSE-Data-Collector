@@ -4,6 +4,7 @@ from django.http import JsonResponse, HttpResponse
 
 from .models import BhavCopyRecord
 
+
 # Create your views here.
 def index(request):
     return render(request, 'bhavcopy/index.html')

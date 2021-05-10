@@ -1,9 +1,11 @@
 v1/
 **/.vscode/
 /.ipynb_checkpoints
-/logs
+*.log
 *.pyc
 **/.cache/
 **/db.sqlite3
 **/.env
 *.zip
+**/static/
+**/media/

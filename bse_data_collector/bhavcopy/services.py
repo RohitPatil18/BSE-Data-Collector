@@ -1,13 +1,16 @@
 import os
+import logging
 import pandas as pd
 
 from datetime import datetime, timedelta
 from urllib import request
+from urllib.error import HTTPError
 from zipfile import ZipFile
 
 from bse_data_collector.settings import BASE_DIR
 from bhavcopy.models import BhavCopyRecord
 
+logger = logging.getLogger(__name__)
 
 class BhavCopyScraper:
     '''
@@ -20,7 +23,7 @@ class BhavCopyScraper:
         self.equity_code = self._get_equity_code()
 
     def _get_equity_code(self):
-        _date = (datetime.today() - timedelta(days=2)).strftime("%d%m%y")
+        _date = (datetime.today() - timedelta(days=1)).strftime("%d%m%y")
         return f'EQ{_date}'
 
     def _download_file(self, zip_file_path):
@@ -64,5 +67,7 @@ class BhavCopyScraper:
                 df = pd.read_csv(f)
                 self.save(df)
                 f.close()
+        except HTTPError:
+            logger.info('BSE did not publish any entries.')
         except Exception as e:
-            print(e)
+            logger.error(e)
