@@ -23,7 +23,7 @@ class BhavCopyScraper:
         self.equity_code = self._get_equity_code()
 
     def _get_equity_code(self):
-        _date = (datetime.today() - timedelta(days=1)).strftime("%d%m%y")
+        _date = datetime.today().strftime("%d%m%y")
         return f'EQ{_date}'
 
     def _download_file(self, zip_file_path):
