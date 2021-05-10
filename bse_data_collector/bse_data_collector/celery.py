@@ -14,6 +14,6 @@ app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 app.conf.beat_schedule = {
     'tsk-download-bhavcopy-zip' : {
         'task' : 'bhavcopy.tasks.download_bhavcopy_zip',
-        'schedule' : crontab(minute=00, hour=18)
+        'schedule' : crontab(minute=0, hour=18)
     }
 }

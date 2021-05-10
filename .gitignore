@@ -9,3 +9,5 @@ v1/
 *.zip
 **/static/
 **/media/
+celerybeat-schedule
+celerybeat-pid
