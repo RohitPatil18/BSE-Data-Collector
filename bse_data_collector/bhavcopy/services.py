@@ -70,5 +70,4 @@ class BhavCopyScraper:
         except HTTPError:
             logger.info('BSE did not publish any entries.')
         except Exception as e:
-            print(e)
             logger.error(e)

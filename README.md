@@ -2,7 +2,7 @@
 
 BSE publishes a "Bhavcopy" (Equity) ZIP every day [here](https://www.bseindia.com/markets/MarketInfo/BhavCopy.aspx). This applications runs a task everyday at 18:00 IST, Downloads the zip and stores the data in Redis database. This data is displayed on a dashboard.
 
-Demo link: 
+Demo link: <https://bhavcopy.dev-apps.online>
 
 Following functionalities are working on Dashboard
 
@@ -26,7 +26,6 @@ Following functionalities are working on Dashboard
 1. Running Project
     * To run dockerized application, Run following command:
         > ```docker-compose build && docker-compose up```
-    * Your appliacation will be accessible on port 3100. Open http://127.0.0.1:3100 on your local machine.
-
+    * Your appliacation will be accessible on port 3100. Open <http://127.0.0.1:3100> on your local machine.
 
 Thanks for checking out this project. Let me know for any improvements.
